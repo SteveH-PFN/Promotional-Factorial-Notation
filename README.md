@@ -342,9 +342,6 @@ These are all equivalent:
 
 ---
 
-### 🔮 Future Note:
-In advanced use cases, you might define custom macros or reusable blocks. For now, bulk notation is your best friend for clarity in highly recursive PFN chains.
-
 ## 🚧 Future Enhancements
 
 - 📊 Add visualizations for expansion trees (Fractal + Promotion)

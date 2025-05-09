@@ -181,7 +181,7 @@ Fractal Mode is an optional PFN extension that reinterprets each number as a **s
 3. For every value >1, recursively treat it like its own factorial tree
 4. Multiply **all values** across all branches
 
-### Example:
+### Examples:
 ```
 Fractal(4): 4×3×(2[×1]×1)×2×1 = 48
 Fractal(5): (((48)^2)×5)/4 = 2880
@@ -262,9 +262,18 @@ As PFN expressions grow, it's often helpful to use **bulk notation** to compress
 - `n` = number of times to repeat
 - `$symbol` = any valid static promotion symbol
 
-#### Example:
+#### Examples of how bulk notation is helpful (styles defined lower on page):
 ```
-3!(6: $1) → 3!($1)^6 → 3!!!!!!!
+3!(6: $1) 
+→ 3!($1)^6 
+→ 3!!!!!!!
+→ 3!(!)^6
+
+3!($1)($1)($1)($1)($1)($1)($2)($2)($2)($2)($2)($3)($3)($3)($3)($3)
+→ 3!($1)^6 ($2)^5 ($3)^5
+
+3!($4)($5)($6)($7)($8)($9)($10)
+→ 3!(1: $4 → $10)
 ```
 
 ---

@@ -204,7 +204,7 @@ The `($1)` promotion appears **B times** (because it's at the bottom and factore
 
 ---
 
-## 🌳 Extension: Fractal Mode
+## 🌳 Extension: Fractal Mode (Fractorials, if you're feeling cheeky.)
 
 Fractal Mode is a recursive multiplication model that works as an extension to PFN.
 
@@ -216,11 +216,11 @@ Fractal Mode is a recursive multiplication model that works as an extension to P
 4x3(x2[x1]x1)x2x1
 ```
 4. The result is the **product** of all values across all branches
-5. The fractal is considered complete when all branches of all factorials end at 
+5. The fractal is considered complete when all branches of all factorials terminate at 1. 
 
 ---
 
-### Growth Formula *(Steve H.'s recurrence)*
+### Growth Formula of fractal factorials 
 
 Let `F(n)` be the Fractal Mode value at `n`:
 
@@ -234,7 +234,7 @@ Fractal 4 = 4x3(x2[x1]x1)x2x1 = 48
 For n = 5, F(n-1) = 48
 Fractal 5 = (((48) ^ 2) * 5)/(5-1) = 2880
 ```
-
+This is due to n+1 having the same basic structure, then you multiply by the new n, and divide to remove a duplicate reference to the n-1 node, which now has two branches, but only one base. 
 ### Growth Properties:
 
 - From `n = 5` onward, `log₁₀(F(n))` roughly **doubles per step** (Needs more thorough testing)
@@ -242,6 +242,7 @@ Fractal 5 = (((48) ^ 2) * 5)/(5-1) = 2880
 - `Fractal(2880)` → ~10^(10^881)
 
 ---
+
 
 ## 🔼 Comparison with Other Notations
 

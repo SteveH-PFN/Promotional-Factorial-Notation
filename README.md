@@ -7,345 +7,319 @@ Licensed under the MIT License
 
 ---
 
-## 📘 Overview
+## 🧠 TL;DR
 
-Promotional Factorial Notation (PFN) is a large number notation system that reimagines factorial chaining in a symbolic language of recursive growth. Instead of using hyperoperations like Knuth's up-arrows, PFN creates massive values through controlled symbolic expansion, layering factorials and recursive structures called *promotion levels*.
-
-PFN balances readability and expressiveness, especially when extended with **Fractal Mode**, a recursive expansion mechanic that pushes PFN to a next level, and has some cool findings.
+**PFN builds absurdly huge numbers using symbolic factorial macros instead of arrows.**  
+Example: `3!($2)` → `3! = 6`, so inject 6 `($1)` → `3!!!!!!!` (6 factorials deep).  
+PFN notation removes the need for parenthesis in iterated factorials, so 3!!! = ((3!)!)!
 
 ---
 
-## 🧮 Symbol Reference Table
+## 🌟 Quick Example
+
+
+### 🔍 Basic example: `3!($3)` → B = 6
+
+```
+3!($3)                                                      # Factorials expanded, others remain
+→ 3!($2)($2)($2)($2)($2)($2)                                # ($3) changes into B=6 number of ($2)
+→ 3!($1)($1)($1)($1)($1)($1)($2)($2)($2)($2)($2)            # One ($2) expands into B number of ($1) 
+→ 3!!!!!!!($2)($2)($2)($2)($2)                              # The next ($2) becomes 3!!!!!!! number of ($1)
+```
+
+
+**Final form:**  
+`3!($1)^6 ($2)^5 ($3)^5`
+
+**Notes:**
+- No bulk operations can define what a ($n) will be at the time they are expanded to the lower level. PFN solves one step at a time.
+- ($1) is the same thing as adding a factorial to the expression. 3!($1) → 3!! → 6! → 720
+---
+
+## 📘 Overview
+
+Promotional Factorial Notation (PFN) reimagines factorial chaining in a symbolic language of recursive growth.  
+Instead of using hyperoperations like Knuth's up-arrows, PFN builds massive values using layered factorials and recursive macros called **promotion levels**.
+
+With **Fractal Mode** (AKA Fractorials), PFN achieves structurally recursive number growth that takes it to the next level. 
+
+---
+
+## 🧮 Core Symbols
 
 | Symbol         | Description                                                          |
 |----------------|----------------------------------------------------------------------|
-| `!`            | Standard factorial                                                   |
-| `!!`, `!!!`    | Chained factorials (evaluated left to right)                         |
-| `($n)`         | Promotion level: expands into `B` copies of `($n−1)`                 |
-| `($dyn)`       | Resolves to current B value at time of evaluation                    |
-| `^`            | Repeat previous symbol a specified number of times                   |
-| `>>`           | Repeat previous block a specified number of times (used with dyn)                  |
+| `!, ($1)`      | Standard factorial                                                   |
+| `!!, !!!`      | Chained factorials (left to right)                                   |
+| `($n)`         | Promotion level: expands into B copies of ($n−1)                     |
+| `$dyn`         | Dynamic placeholder: resolves to current B at evaluation             |
+| `^`            | Repeat previous symbol a number of times (e.g., `($1)^6`)            |
+| `>>`           | Repeat previous block                                                |
 
-
----
-
-## 🔧 Core Mechanics
-
-### 🧱 Base Operations (B)
-
-A PFN expression begins with a whole number followed by chained factorials:
-
-```
-3!   = 6
-3!!  = (3!)! = 6! = 720
-```
-
-- Factorials are evaluated **left to right**.
-- The **base** `B` is always the running result of the initial value plus any chained factorials.
-- As promotion symbols expand, they reference the current value of `B`, which grows rapidly and fuels deeper recursion.
+Start with `!`, `($n)`. Save `$dyn`, `^`, and `>>` for later.
 
 ---
 
-### 🪜 Promotion Levels `($n)`
+## 🔧 Base Mechanics
 
-Promotion symbols are what make PFN explode.
+### 🧱 Base (B)
 
-- `($1)` = Append one factorial (!)
-- `($2)` = Expand into `B` copies of `($1)`
-- `($3)` = Expand into `B` copies of `($2)`
-- And so on...
+- PFN begins with a whole number and optional factorials:
+  - `3! = 6`
+  - `3!! = 6! = 720`
+- This result becomes the **Base (B)** for promotion evaluations. **B** is not static through unsolved PFN expressions. It will change as you solve the expression. 
 
-| Promotion | Meaning                                     |
-|-----------|---------------------------------------------|
-| `($1)`    | One factorial (!), applied to current value |
-| `($2)`    | `B` copies of `($1)`                        |
-| `($3)`    | `B` copies of `($2)`                        |
+### 🪜 Promotions
 
-> Think of each `($n)` as a symbolic **macro** that expands into lower levels using the current `B`.
+| Symbol   | Meaning                           |
+|----------|-----------------------------------|
+| `($1)`   | Apply one factorial (!)           |
+| `($2)`   | B copies of `($1)`                |
+| `($3)`   | B copies of `($2)`                |
 
-#### Example:
-
-```
-3!($2)
-→ 3! = 6
-→ Insert 6 copies of ($1)
-→ 3!($1)($1)($1)($1)($1)($1)
-→ 3!!!!!!!
-```
+> Each `($n)` expands into lower promotions **using the current B value**.
 
 ---
 
-## 🔄 Dynamic Symbol `$dyn`
+## 🔄 Dynamic `$dyn`
 
-`$dyn` resolves to the current value of the full expression when it's reached.
+- `$dyn` evaluates to current B **at the moment it is read**.
+- Used **after** static promotions.
 
-- Must appear **after all static promotions**
+Example:  
+`3!!($dyn)`  
+→ `3!! = 720` → `$dyn = ($720)` → `3!!($720)`
 
-```
-3!!($dyn)
-→ 3!! = 720, so `$dyn` becomes `($720)`
-```
-
-You can also use `>>` to repeat it:
-
-```
-3!($dyn) >> 5
+With repetition:  
+`3!($dyn)>>5` → inserts 5 copies of `($dyn)`
 → 3!($dyn)($dyn)($dyn)($dyn)($dyn)
-```
+ 
+---
 
-Nested usage allows wild recursion of entire blocks of logic using dyn:
+### 🔄 Fully Lazy, Step-by-Step Solving
 
-```
-3!(($dyn)>>dyn) >> dyn
-→ 3!(($dyn)>>dyn)(($dyn)>>dyn)(($dyn)>>dyn)(($dyn)>>dyn)(($dyn)>>dyn)(($dyn)>>dyn)
-```
-Steps for above:
-- Evaluate base: 3! = 6 => B = 6
-- Start with the outermost '>>dyn'
-- Since dyn = 6, repeat the block to the left of it—"(($dyn)>>dyn)"—six times
-- Each copy of that block will be evaluated independently, at the time it is reached
-- Solving each block involves resolving dyn again, inserting that many unsolved ($dyn)s
+PFN is built as a **fully lazy, just-in-time system**. Nothing gets blown up all at once—every factorial, promotion, and dynamic placeholder stays dormant until it’s their turn to run.
+
+#### 🔧 Valve-style execution  
+Think of each symbol—`!`, `($n)`, `$dyn`, `>>`, `^`—as a **closed valve in a pipe**. You only “open” it when the flow of evaluation reaches that exact point.
+
+#### 🔁 Base updates at every step  
+After you solve a symbol (like a `!` or `($1)`), your **Base (B)** updates.  
+The next promotion unfolds using **that new B**, not the one you started with.
+
+#### 🚫 No bulk unpacking  
+You never expand the whole chain of promotions at once. PFN **climbs the mountain one rung at a time**: solve a symbol → update context (base) → move on.
+
+#### 🧰 On-demand macros  
+Symbols like `($dyn)>>dyn` stay symbolic until they’re encountered.  
+At that moment, `$dyn` reads the *current* B and expands just enough to keep climbing.
+
+> This just-in-time magic is what lets PFN express **gargantuan growth** without calculating everything up front.
+
+---
+## ✅ Valid Syntax
+
+- Promotions must be **ascending**
+- `$dyn` must follow all static symbols
+
+✅ Valid: `3!($2)($3)($4)`  
+❌ Invalid: `3!($4)($2)`, `($3)3!`, `3!($dyn)($2)`
+
+PFN expressions rewrite in ascending order every step of the sequence. 
 
 ---
 
-## ✅ Valid PFN Syntax
+## 🔍 First Simplified Form
 
-Proper PFN expressions:
-- Start with a whole number and optional factorials
-- Follow with promotions in **ascending** order
-- Use `$dyn` **after** all static promotions
+B!($L) ≈ B! · ($1)^B · ($2 → $L−1)^(B−1)
+
+
+### 🔍 Worked Example: `3!($4)` → B = 6
 
 ```
-✅ Valid:
-3!($2)($2)($2)
-3!($2)($3)($4)
-3!($20)($dyn)
+3!($4)
+→ 3!($3)($3)($3)($3)($3)($3)                                                    # ($4) becomes 6 copies of ($3)
+→ 3!($2)($2)($2)($2)($2)($2)($3)($3)($3)($3)($3)                                # One ($3) becomes 6 copies of ($2)
+→ 3!($1)($1)($1)($1)($1)($1)($2)($2)($2)($2)($2)($3)($3)($3)($3)($3)            # One ($2) becomes 6 copies of ($1)
+     
+           
+→ 3!!!!!!!($2)^5($3)^5            # Factorials expanded, others remain
+```
 
-❌ Invalid:
-3!($3)($4)($2)      ← Not ascending
-($4)3!              ← Promotions must follow a base
-3!($dyn)($30000)    ← Static symbol cannot follow dyn
+**Final form:**  
+`3!($1)^6 ($2)^5 ($3)^5`
+
+
+
+## 🌳 Part II: An Optional PFN fractal mode. AKA Fractorials (Fractal + Factorial)
+
+“Fractorials” combine fractals and factorials: each number branches into smaller factorial chains, recursively, until all branches terminate on at 1. 
+
+---
+
+### 🧩 How It Works
+
+Fractorials build a **factorial tree**, where each node greater than 1 creates its own subtree. The final result is the product of **all nodes** in the entire structure.
+
+---
+
+### 🔢 Fractal(4)
+
+We’ll walk through the structure visually.
+
+```
+          4
+         /
+        3
+       / \
+      /   \
+     2     2
+    / \   / \
+   1   1 1   1
+```
+
+- **4** has children: 3, 2, 1
+- **3** creates its own subtree: 2, 1
+- **2** creates: 1
+- All leaf nodes = 1
+
+Now multiply all nodes:
+```
+= 4 × 3 × 2 × 1 × 2 × 1 × 1 × 1 × 1
+= 48
 ```
 
 ---
 
-## 🔬 First Simplified Form
+### 🔢 Fractal(5)
 
-PFN expressions expand recursively, but a pattern emerges that helps us describe the structure without full evaluation.
-
-**General Formula:**
-```
-B!($L) → B! · ($1)^B · ($2 → $L−1)^(B−1)
-```
-
-**Alternate Notations:**
-```
-- B! · B×($1) · (B−1)×($2→$L−1)
-- B! + repeat($1, B) + repeat(range($2, $L−1), B−1)
-```
-
-### 🔍 Worked Example: `3!($4)`
-
-- `3! = 6` ⇒ `B = 6`, `L = 4`
-
-So:
-```
-3!($4) 
-→ 3!($3)($3)($3)($3)($3)($3) ($4) turns into B number of ($3)
-→ 3!($2)($2)($2)($2)($2)($2)($3)($3)($3)($3)($3) turns 1 of those ($3) into B number of ($2)
-→ 3!($1)($1)($1)($1)($1)($1)($2)($2)($2)($2)($2)($3)($3)($3)($3)($3) turns 1 of those ($2) into B number of ($1)
-→ 3!!!!!!!($2)($2)($2)($2)($2)($3)($3)($3)($3)($3) If you want to write out the factorials, rather than have ($1) as they are the same. 
-
-Bulk notations to represent above (Bulk notations defined later in this page):
-3!($1)^6 ($2)^5 ($3)^5
-3!($1)^6 ($2, $3)^5
-3!(!)^6 ($2)^5 ($3)^5
-3!!!!!!! ($2)^5 ($3)^5
+```       
+                5
+               /
+              4
+             / \
+            /   \
+           /     \
+          /       \
+         /         \
+        3           3
+       / \         / \
+      /   \       /   \
+     2     2     2     2
+    / \   / \   / \   / \
+   1   1 1   1 1   1 1   1
 ```
 
-That means:
-- 6 copies of `($1)`
-- 5 copies each of `($2)` and `($3)`
-- Total demotion happens **one layer at a time**, using the current B at each step
+- Fractal(5) includes a duplication of the 4 => 3 => 2 => 1 trees 
+- But **only one** copy of node 4.
+- So we adjust by:
+
+```
+Fractal(5) = (Fractal(4)^2 × 5) / 4
+           = (48^2 × 5) / 4
+           = (2304 × 5) / 4
+           = 2880
+```
 
 ---
 
-## 🌳 Fractal Mode (Fractorials, if you're feeling cheeky)
+### 🧠 Why the Formula Works
 
-Fractal Mode is an optional PFN extension that reinterprets each number as a **self-branching factorial tree**.
-
-### Rules:
-
-1. Start with any `n`
-2. Create descending factorial chain: `n, n-1, ..., 1`
-3. For every value >1, recursively treat it like its own factorial tree
-4. Multiply **all values** across all branches
-
-### Examples:
-```
-Fractal(4): 4×3×(2[×1]×1)×2×1 = 48
-Fractal(5): (((48)^2)×5)/4 = 2880
-```
-
-
-### 📈 Growth Formula
-
+**Formula:**
 ```
 F(1) = 1  
-F(n) = (F(n−1)^2 × n) / (n − 1), for n ≥ 1
+F(n) = (F(n−1)^2 × n) / (n − 1)
 ```
 
-> 🧠 **Intuition Behind the Formula:**
-
-- When building `Fractal(n+1)`, the structure of `Fractal(n)` appears **twice**:
-  - Once directly
-  - Once as a sub-branch beneath the new root `n+1`
-  
-- This results in the `n` node being **double-counted**.
-
-- To correct for this:
-  - ✅ **Divide by `(n−1)`** to remove the duplicate reference
-  - ✅ **Multiply by `n`** to add the new top-level node
-
-> 📌 Fractal growth is **not just exponential**, but **structurally recursive**—
-> each layer symmetrically replicates and nests the prior.
+- When building Fractal(n+1), the structure of Fractal(n) appears:
+  - ✅ Once directly
+  - ✅ Once nested under n+1
+- This causes **double counting** of node `n`
+- ✅ **Divide by (n−1)** to fix the for the shared node at 'n-1'
+- ✅ **Multiply by (n+1)** to include new top-level node
 
 ---
 
-### 🔢 Approximate Growth
+### 🚀 Fractorial Growth
 
-- `Fractal(50)` ≈ **~10^29 digits**
-- `Fractal(2880)` ≈ **~10^(10^881)**
-- From `n = 5` onward,  
-  `log₁₀(F(n))` **asymptotically doubles** with each step
-> ℹ️ **What does 'asymptotically doubles' mean?**  
-> As n increases, the number of digits in F(n) grows so rapidly that it causes log₁₀(F(n)) to be just over double every time, closer to exactly 2 as you go up.
-> At n = 30, log₁₀(F(n)) is still growing faster than exactly 2x—but by less than a billionth.
-> The farther you go, the more exact that doubling becomes.
+- Fractal(4) = 48  
+- Fractal(5) = 2880  
+- Fractal(6) = (2880^2 × 6) / 5 ≈ 9.9 million  
+- Fractal(50) ≈ 10^29 digits  
+- Fractal(2880) ≈ 10^(10^881)
 
-> 🧨 Fractorials are brutally effective growth tools when used inside PFN expressions.
-
-
+Compared to Factorials:
+- 4! = 24
+- 5! = 120
+- 6! = 720
+- 50! ~ 3.04 × 10⁶⁴
 ---
 
-## 🔁 Comparison with Hyperoperations
+> Fractorials explode in size due to **recursive self-similarity** and rapid compound branching.
 
-PFN mirrors the recursive **structure** of hyperoperations-not their numeric values.
 
-| PFN        | Structure                       | Knuth Arrows |
-|------------|----------------------------------|---------------|
-| `($1)`     | Single factorial                 | `↑`           |
-| `($2)`     | B repetitions of `($1)`          | `↑↑`          |
-| `($3)`     | B repetitions of `($2)`          | `↑↑↑`         |
-| `($4)`     | B repetitions of `($3)`          | `↑↑↑↑`        |
-
-> PFN replaces `^` with `!`, and turns repetition into **symbolic recursion**.
-
----
 ## 📦 Bulk Notation
 
-As PFN expressions grow, it's often helpful to use **bulk notation** to compress repeated symbols for clarity and sanity.
+Compress long repeated chains.
 
-### 🧾 Purpose:
-- Compress long chains of promotions or recursive elements
-- Improve readability when dealing with large B values
-- Allow symbolic demotion to be expressed in one line
+### Basic Format:
+`(n: $symbol)` → n copies of promotion
 
----
+**Example:** `3!(6: $1)` = `3!($1)^6` = `3!!!!!!!`
 
-### 🔢 Basic Format:
+### Range Format:
+`(n: $2, $3)` = repeat both symbols n times  
+`(5: $2 → $4)` = $2, $3, $4 ×5
 
-```
-(n: $symbol)
-```
+### Valid:
+- `3!(6:$1)(5:$2, $3)`  
+- `3!(range $2-$5)^B`
 
-- `n` = number of times to repeat
-- `$symbol` = any valid static promotion symbol
-
-#### Examples of how bulk notation is helpful (styles defined lower on page):
-```
-3!(6: $1) 
-→ 3!($1)^6 
-→ 3!!!!!!!
-→ 3!(!)^6
-
-3!($1)($1)($1)($1)($1)($1)($2)($2)($2)($2)($2)($3)($3)($3)($3)($3)
-→ 3!($1)^6 ($2)^5 ($3)^5
-
-3!($4)($5)($6)($7)($8)($9)($10)
-→ 3!(1: $4 → $10)
-```
+❌ Invalid:
+- `3!(5:$4, $2)` (not ascending)  
+- `3!(($1)^6, ($1)^6)` (duplicated)
 
 ---
 
-### 📚 Extended Format for Ranges:
+## 🔁 PFN vs. Hyperoperations
 
-You can also apply a count to **multiple** symbols at once:
+| PFN        | Structure                        | Knuth Arrows |
+|------------|----------------------------------|--------------|
+| `($1)`     | Single factorial                 | ↑            |
+| `($2)`     | B × `($1)`                       | ↑↑           |
+| `($3)`     | B × `($2)`                       | ↑↑↑          |
 
-```
-(n: $2, $3, $4)
-```
-
-- Repeat each symbol in the list `n` times.
-- All symbols must follow ascending order.
-
-#### Example:
-```
-3!(5: $2, $3)
-→ 3!($2)^5($3)^5
-```
+> PFN swaps exponentiation with **symbolic recursion**. Structural similarity doesn't lead to as large of values for small PFN expressions.
 
 ---
 
-### 🧠 Optional Alternate Styles
+## 📈 3!!!!!!!! - Stirling Breakdown
 
-These are all equivalent:
+7 chained factorials:
 
-| Style                         | Meaning                                          |
-|------------------------------|--------------------------------------------------|
-| `3!(6: $1)`                  | 6 copies of `($1)`                               |
-| `3!($1)^6`                   | Power-style repeat of `($1)`                     |
-| `3!(5: $2 → $4)`             | Shorthand for `($2), ($3), ($4)` ×5 each         |
-| `3!(range $2-$4)^5`          | Repeat a promotion range 5 times                 |
-| `3!(6×$1, 5×($2 → $4))`      | Mixed inline expansion                           |
-| `3!(($1)^6, ($2)^5, ($3)^5)` | Fully expanded, but grouped for clarity          |
+```
+3! = 6  
+6! = 720  
+720! ≈ 10^1340  
+(720!)! ≈ 10^(1.34×10^1343)  
+Next step: ≈ 10^(10^(1.34×10^1343))
+```
 
-> You can use any of these as long as the meaning is clear. PFN supports **symbolic flexibility**, but always favor **readability**.
+So:
+**3!!!!!!!! ≈ 10^(10^(1.34 × 10^1343))**
+
+> Stirling's gives us usable approximations through **n₄** before all hell breaks loose.
 
 ---
 
-### 🚧 Important Guidelines
+## 🚀 Try It Yourself!
 
-- Bulk ranges **must be ascending**: `($2, $3, $4)` ✅ — `($4, $3, $2)` ❌
-- `$dyn` **cannot appear** inside bulk ranges — it's evaluated, not repeated
-- Be cautious with mixed ranges and powers to avoid ambiguity
+Start small: `3!($2)` → `3!!!!!!!`  
+Build up: `4!($3)($4)($5)`  
+Crank up the heat: `4!($3)($dyn)($dyn)`  
+Go wild: `3!(($dyn)>>dyn)>>dyn` (repeats ($dyn)>>dyn) blocks, each lazily evaluated/solved when they are reached)
 
----
-
-### ✅ Valid Bulk Usage Examples
-
-```
-3!(6:$1)(5:$2, $3, $4)
-3!(range $2-$5)^B
-3!(($1)^6, ($2)^5, ($3)^5)
-3!(B:$1)($dyn)
-3!(($dyn)^5) (Evaluate dyn, repeat that number of times)
-→ 3!($dyn)($dyn)($dyn)($dyn)($dyn)
-```
-
-### ❌ Invalid Bulk Usage Examples
-
-```
-3!(5:$4, $2)          ← Not ascending
-3!($1)(6:$1)          ← Duplicate expansion; choose one or the other
-```
-
----
-
-## 🚧 Future Enhancements
-
-- 📊 Add visualizations for expansion trees (Fractal + Promotion)
-- 🔍 Growth rate comparison against other large number notations (Conway, Ackermann)
+What’s the biggest number you can create succinctly?
 
 ---
 
@@ -361,4 +335,4 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 ---
 
-> This documentation is a work in progress. Contributions, clarifications, examples, and visualizations are welcome!
+> Contributions, diagrams, parsers, and recursive madness are welcome!

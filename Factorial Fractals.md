@@ -100,6 +100,19 @@ Compared to Factorials:
 - 5! = 120
 - 6! = 720
 - 50! ~ 3.04 × 10⁶⁴
+
 ---
 
 > Fractorials explode in size due to **recursive self-similarity** and rapid compound branching.
+
+---
+
+### 📈 Logarithmic Growth Insight
+
+As `n` increases, the base-10 logarithm of Fractal(n) **asymptotically doubles** at each step:
+
+```
+log₁₀(F(n+1)) ≈ 2 × log₁₀(F(n))
+```
+
+This results in **exponential growth of exponential growth**, overtaking standard factorials dramatically.

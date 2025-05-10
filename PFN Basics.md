@@ -151,10 +151,11 @@ B!($L) ≈ B! · ($1)^B · ($2 → $L−1)^(B−1)
 
 
 
-## 🌳 Part II: An Optional PFN fractal mode. AKA Fractorials (Fractal + Factorial)
+## 🌳 Optional DLC or stand-alone: Fractal Factorials (Fractorials, if you're feeling cheeky)
 
 “Fractorials” combine fractals and factorials: each number branches into smaller factorial chains, recursively, until all branches terminate on at 1. 
 
+https://github.com/SteveH-PFN/Promotional-Factorial-Notation/blob/main/Factorial%20Fractals.md 
 ---
 
 ### 🧩 How It Works

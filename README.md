@@ -96,27 +96,6 @@ With repetition:
  
 ---
 
-### 🔄 Fully Lazy, Step-by-Step Solving
-
-PFN is built as a **fully lazy, just-in-time system**. Nothing gets blown up all at once—every factorial, promotion, and dynamic placeholder stays dormant until it’s their turn to run.
-
-#### 🔧 Valve-style execution  
-Think of each symbol—`!`, `($n)`, `$dyn`, `>>`, `^`—as a **closed valve in a pipe**. You only “open” it when the flow of evaluation reaches that exact point.
-
-#### 🔁 Base updates at every step  
-After you solve a symbol (like a `!` or `($1)`), your **Base (B)** updates.  
-The next promotion unfolds using **that new B**, not the one you started with.
-
-#### 🚫 No bulk unpacking  
-You never expand the whole chain of promotions at once. PFN **climbs the mountain one rung at a time**: solve a symbol → update context (base) → move on.
-
-#### 🧰 On-demand macros  
-Symbols like `($dyn)>>dyn` stay symbolic until they’re encountered.  
-At that moment, `$dyn` reads the *current* B and expands just enough to keep climbing.
-
-> This just-in-time magic is what lets PFN express **gargantuan growth** without calculating everything up front.
-
----
 ## ✅ Valid Syntax
 
 - Promotions must be **ascending**

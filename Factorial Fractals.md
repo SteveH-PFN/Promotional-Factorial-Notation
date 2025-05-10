@@ -116,3 +116,8 @@ log₁₀(F(n+1)) ≈ 2 × log₁₀(F(n))
 ```
 
 This results in **exponential growth of exponential growth**, overtaking standard factorials dramatically.
+
+### Promotional Factorial Notation
+
+I stumbled on Fractorials when contemplating another notation, PFN, which uses recursion and step-by-step evaluation to create large number. You can read more here:
+[View the PFN page here](https://github.com/SteveH-PFN/Promotional-Factorial-Notation/edit/main/README.md)

@@ -92,8 +92,7 @@ F(n) = (F(n−1)^2 × n) / (n − 1)
 - Fractal(4) = 48  
 - Fractal(5) = 2880  
 - Fractal(6) = (2880^2 × 6) / 5 ≈ 9.9 million  
-- Fractal(50) ≈ 10^29 digits  
-- Fractal(2880) ≈ 10^(10^881)
+
 
 Compared to Factorials:
 - 4! = 24
